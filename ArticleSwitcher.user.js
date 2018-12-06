@@ -31,7 +31,7 @@ function getArticleLink(){
                 links.push(docs[i].getElementsByTagName("link")[0].innerHTML);
             }
             var link = xmlDoc.getElementsByTagName("item")[0].getElementsByTagName("link")[0].innerHTML;
-            console.log(links);
+            //console.log(links);
             if (document.title != xmlDoc.getElementsByTagName("item")[0].getElementsByTagName("title")[0].innerHTML){
                 getArticle(link);
             }else{
