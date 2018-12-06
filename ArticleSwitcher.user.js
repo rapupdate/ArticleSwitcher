@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Switcher
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Capi 2 Mio Artikel ändern auf aktuellen DU Artikel
 // @author       You
 // @match        http://www.rapupdate.de/erster-deutscher-rapper-hat-jetzt-2-millionen-fans/
@@ -51,7 +51,9 @@ function getArticle(link){
                 var htmlDoc = parser.parseFromString(response.responseText,"text/html");
                 //console.log(htmlDoc.getElementsByTagName("article"));
                 //var link = xmlDoc.getElementsByTagName("item")[0].getElementsByTagName("link")[0].innerHTML;
-                editContent(htmlDoc,link);
+                var header = htmlDoc.getElementsByTagName("h2")[0].getElementsByTagName("a")[0].innerHTML;
+                var test = $($("h1")[0]).find("a");
+                if (test.html()!=header)editContent(htmlDoc,link);
 
             }
         } );
@@ -70,6 +72,7 @@ function editContent(article,link){
     console.log($(".wp-post-image"));
     $(".wp-post-image").attr("src",imgLink);
     $(".wp-post-image").attr("srcset",imgLink);
+    console.log($(".wp-post-image"));
     var remScripts=[];
     for (var i = 0;i<scripts.length;i++){
         if(articleTree.getElementsByTagName("script")[i].src == "" || articleTree.getElementsByTagName("script")[i].src == undefined){
@@ -94,12 +97,12 @@ function editContent(article,link){
     var test = $($("h1")[0]).find("a");
     test.html(header)
     test.attr("href",link);
-    $("article").find("p").remove();
+    $("article").find("p:not(:first)").remove();
     $("article").find("h4").remove();
     $("article").find("span").remove();
     var container = document.createElement("div");
     container.id = "articleContainer";
     container.innerHTML = text;
-    $("article").find("h1").after(container);
+    $("article").find("p:first").after(container);
     document.title = header;
 }
