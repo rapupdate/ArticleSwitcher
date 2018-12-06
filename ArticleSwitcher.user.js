@@ -21,18 +21,18 @@ function getArticleLink(){
     //console.log("getArticleLink");
     GM_xmlhttpRequest ( {
         method:     "GET",
-        url:        "http://www.deinupdate.de/?feed=rss2",
+        url:        "http://www.deinupdate.de/?feed=atom",
         onload:     function (response) {
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(response.responseText,"text/xml");
             var links = [];
-            var docs = xmlDoc.getElementsByTagName("item");
+            var docs = xmlDoc.getElementsByTagName("entry");
             for (var i=0; i < docs.length; i++){
-                links.push(docs[i].getElementsByTagName("link")[0].innerHTML);
+                links.push(docs[i].getElementsByTagName("id")[0].innerHTML);
             }
-            var link = xmlDoc.getElementsByTagName("item")[0].getElementsByTagName("link")[0].innerHTML;
-            //console.log(links);
-            if (document.title != xmlDoc.getElementsByTagName("item")[0].getElementsByTagName("title")[0].innerHTML){
+            var link = xmlDoc.getElementsByTagName("entry")[0].getElementsByTagName("id")[0].innerHTML;
+            console.log(xmlDoc.getElementsByTagName("entry")[0].getElementsByTagName("title")[0].innerHTML);
+            if ("<![CDATA["+document.title+"]]>" != xmlDoc.getElementsByTagName("entry")[0].getElementsByTagName("title")[0].innerHTML){
                 getArticle(link);
             }else{
                 //console.log("Titel: " + xmlDoc.getElementsByTagName("item")[0].getElementsByTagName("title")[0].innerHTML);
@@ -103,5 +103,3 @@ function editContent(article,link){
     $("article").find("h1").after(container);
     document.title = header;
 }
-
-
