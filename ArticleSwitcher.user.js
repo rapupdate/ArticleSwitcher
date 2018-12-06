@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Article Switcher
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  Capi 2 Mio Artikel ändern auf aktuellen DU Artikel
 // @author       You
 // @match        http://www.rapupdate.de/erster-deutscher-rapper-hat-jetzt-2-millionen-fans/
@@ -100,9 +100,13 @@ function editContent(article,link){
     $("article").find("p:not(:first)").remove();
     $("article").find("h4").remove();
     $("article").find("span").remove();
+    if($("#articleContainer").length){
+        $("#articleContainer").remove();
+    }
     var container = document.createElement("div");
     container.id = "articleContainer";
     container.innerHTML = text;
+
     $("article").find("p:first").after(container);
-    document.title = header;
+    document.title = header.replace("&amp;","&");
 }
