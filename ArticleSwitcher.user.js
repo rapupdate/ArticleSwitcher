@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Article Switcher
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  Capi 2 Mio Artikel ändern auf aktuellen DU Artikel
 // @author       You
 // @match        http://www.rapupdate.de/erster-deutscher-rapper-hat-jetzt-2-millionen-fans/
+// @match        http://www.rapupdate.de/150388-2/
 // @require      https://code.jquery.com/jquery-3.3.1.min.js
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
@@ -69,6 +70,11 @@ function editContent(article,link){
     var scripts = articleTree.getElementsByTagName("script");
     var imgLink = headerTree.getElementsByTagName("img")[0].src.replace("http:","https:");
     console.log(imgLink);
+    if (window.location.href.indexOf("150388-2")>-1){
+        $("article").find("p:first").html('<img src="https://www.deinupdate.de/wp-content/uploads/2018/12/Screen-Shot-2018-12-09-at-02.33.05-750x480.png" class="wp-image-150375 attachment-medium_large size-medium_large wp-post-image" alt="" srcset="https://www.deinupdate.de/wp-content/uploads/2018/12/Screen-Shot-2018-12-09-at-02.33.05-750x480.png" sizes="(max-width: 730px) 100vw, 730px">')
+    }
+        $("article").find("p:not(:first)").remove();
+
     console.log($(".wp-post-image"));
     $(".wp-post-image").attr("src",imgLink);
     $(".wp-post-image").attr("srcset",imgLink);
@@ -97,8 +103,11 @@ function editContent(article,link){
     var test = $($("h1")[0]).find("a");
     test.html(header)
     test.attr("href",link);
-    $("article").find("p:not(:first)").remove();
+
+    
     $("article").find("h4").remove();
+    $("article").find("h2").remove();
+    $("article").find("h3").remove();
     $("article").find("span").remove();
     if($("#articleContainer").length){
         $("#articleContainer").remove();
